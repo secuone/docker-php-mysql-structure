@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Permitir el acceso a los archivos existentes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Ruta a index.php si el recurso no existe
+    RewriteRule ^(.*)$ index.php [L]
+</IfModule>
