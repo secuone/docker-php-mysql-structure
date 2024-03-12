@@ -24,3 +24,6 @@ RUN docker-php-ext-configure pcntl --enable-pcntl && \
 
 # Clean PHP cache
 RUN rm -rf /tmp/*
+
+WORKDIR /app
+COPY php.ini /usr/local/etc/php/php.ini
