@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  php:
+    container_name: php
+    build:
+      context: ./etc/php
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/var/www/html/
+    environment:
+      - HTML_ERRORS
+      - DISPLAY_ERRORS
+    ports:
+      - 8000:80
+    depends_on:
+      - mysql
+    restart: on-failure
+
+  composer:
+    container_name: composer
+    build:
+      context: ./etc/php
+    volumes:
+      - ./app:/app/
+    entrypoint: [ "composer" ]
+    depends_on:
+      - php
+    working_dir: /app
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ${PWD}/migrations:/docker-entrypoint-initdb.d
+    restart: on-failure
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    restart: on-failure
